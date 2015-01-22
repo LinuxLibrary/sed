@@ -1,0 +1,64 @@
+*** Intro to SED (Stream Editor) ***
+------------------------------------
+
+ Usage:
+  1. sed [options] 'instruction' file | PIPE | STDIN
+  2. sed -e 'instruction1' -e 'instruction2' ...
+  3. sed -f script_file_name file
+ Note: Execute sed by indicating on one of the following:
+  1. Command-line
+  2. Script file
+ 
+ Note: Sed accepts instructions based on '/patters_to_match/action'
+ *** Print specific lines of a file ***
+ Note: -e is optional if there is only 1 instruction to execute
+ sed -ne '1p' animals.txt  -  prints 1st line of the text
+	1 - Line number 1
+	p - Print
+ sed -ne '2p' animals.txt - prints 2nd line of the text
+ sed -ne '$p' animals.txt - prints last printable line of the file
+ sed -ne '2,4p' animals.txt - prints lines 2-4 from file
+ sed -ne '1!p' animals .txt - prints all lines except line #1
+ sed -ne '1,4!p' animals .txt - prints all lines except line 1 - 4
+ sed -ne '/dog/p' animals.txt - prints all lines containing 'dog' - case-sensitive
+ sed -ne '/dog/Ip' animals.txt - prints all lines containing 'dog' - case-insensitive
+ sed -ne '/[0-9]/p' animals.txt - prints ALL lines with atleast 1 numeric
+ sed -ne '/cat/,/deer/p' animals.txt - prints ALL lines beginning with 'cat' ending with 'deer'
+ sed -ne '/deer/,+2p' animals.txt - prints the line with 'deer' plus 2 extra lines
+ 
+ *** Delete lines using SED addresses ***
+ sed -ne '/^$/d' animals.txt - deletes blank lines from file
+ Note: Drop '-n' to see the new output when deleting
+ 
+ sed -e '1~2d' animals.txt - deletes every 2nd line beginning with line 1 - prints 1,3,5
+ 
+ *** Save SED's changes using Output Redirection ***
+ sed -ne '/^$/d' animals.txt > animals2.txt - deletes blank lines from file and created a new file named animals2.txt
+ 
+ 
+ *** Search and replace using SED ***
+ General Usage:
+ sed -e 's/find/replace/g' animals.txt - replaces 'find' with 'replace'
+ Note: Left Hand Side (LHS) supports literals and RegExes
+ Note: Right Hand Side (RHS) supports literals and references
+ 
+ *** Examples : ***
+ sed -e 's/LinuxCBT/UnixCBT/' - replaces 'LinuxCBT' with 'UnixCBT' on STDIN to STDOUT
+ 
+ Note: Replacements occurs onthe first match, unless 'g' is appended to the s/find/replace/g sequence
+ sed -e 's/LinuxCBT/UnixCBT/Ig' - replaces 'LinuxCBT' with 'UnixCBT' on STDIN to STDOUT (Case-Insensitive & Global)
+ sed -e 's/cat/Tiger/Ig' animals.txt
+ 
+ Task:
+  1. Remove All blank lines
+  2. Substitute 'cat', regardless of case, with 'Tiger'
+  
+  sed -ne 's/cat/Tiger/Ipg' animals.txt
+  Note: Whenever using '-n' option, you must specify the print modifier 'p'
+  sed -ne '/^$/d' -e 's/cat/Tiger/Igp' animals.txt - removes blank lines and substitutes 'cat' with 'Tiger'
+  OR  sed -ne '/^$/d'; 's/cat/Tiger/Igp' animals.txt - does the same as the above
+  Note: Simply separate multiple commands with semicolons
+  
+  *** Update Source File - Backup Source File ***
+  sed -i.bak -ne '/^$/d'; 's/cat/Tiger/Igp' animals.txt - performs as above, but also replaces the SOURCE file and backs it up.
+  
