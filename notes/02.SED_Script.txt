@@ -1,0 +1,31 @@
+*** Apply changes to Multiple Files ***
+SED supports globbing via wildcards: *, ?
+
+ Make a copy of the animals.txt file say animals3.txt
+ Verify that you have 3 animals files there in your directory.
+ sed -ne 's/\(.*\)\([0-9]\)$/\1 \2' animals*.txt
+ 
+ 
+*** SED Scripts ***
+Note: SED supports scripting , which means, the ability to dump 1 or more instructions 
+	in to 1 file.
+
+sed -f script_file_name text_file
+
+sed -f animals.sed animals.txt
+
+Task: 
+Perform multiple transformations on animals.txt file
+ 1. /^$/d - Remove blank lines
+ 2. s/dog/frog/Ig - substitutes globally, 'dog' with 'frog' - (case-insensitive)
+ 3. s/tiger/lion/Ig - substitutes globally, 'tiger' with 'lion' - (case-insensitive)
+ 4. s/.*/Animals: &/ - Interspersed 'Animals: '
+ 5. s/animals/mammals/Ig - Replaced 'Animals' with 'mammals'
+ 6. s/([a-z]*\)\([0-9]*\)/\1/Ip - Strips trailing numeric values from alphas
+ 
+Randomly add spaces to the animals3.txt file and execute the sed script on this file.
+
+SED Scripting Rules:
+ 1. SED applies ALL rules to each lines
+ 2. SED applies ALL changes dynamically to the pattern spaces
+ 3. SED ALWAYS works with the current line 
